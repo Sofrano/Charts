@@ -108,10 +108,11 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
         _rightAxisMax = -Double.greatestFiniteMagnitude
         _rightAxisMin = Double.greatestFiniteMagnitude
         
+        // TODO: Special for TN
         let allData = self.allData
-        
-        for data in allData
-        {
+        guard let data = (allData.filter { $0 as? BarChartData == nil && $0.dataSets.first?.isVisible ?? false}).first else { return }
+        //for data in allData
+        //{
             data.calcMinMax()
             
             let sets = data.dataSets
@@ -162,7 +163,7 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
                     }
                 }
             }
-        }
+       // }
     }
     
     /// All data objects in row: line-bar-scatter-candle-bubble if not null.
@@ -283,7 +284,7 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
     ///   - highlight: current highlight
     /// - Returns: dataset related to highlight
     @objc open func getDataSetByHighlight(_ highlight: Highlight) -> IChartDataSet!
-    {  
+    {
         if highlight.dataIndex >= allData.count
         {
             return nil

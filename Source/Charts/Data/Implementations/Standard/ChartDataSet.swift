@@ -174,6 +174,13 @@ open class ChartDataSet: ChartBaseDataSet
         return self[i]
     }
     
+    public func insert(entries: [ChartDataEntry], at index: Int) {
+        self.entries.insert(contentsOf: entries, at: index)
+        for entry in entries {
+            calcMinMax(entry: entry)
+        }
+    }
+    
     /// - Parameters:
     ///   - xValue: the x-value
     ///   - closestToY: If there are multiple y-values for the specified x-value,
@@ -528,6 +535,7 @@ extension ChartDataSet: RandomAccessCollection {
 
 // MARK: RangeReplaceableCollection
 extension ChartDataSet: RangeReplaceableCollection {
+    
     public func append(_ newElement: Element) {
         calcMinMax(entry: newElement)
         entries.append(newElement)
