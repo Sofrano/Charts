@@ -103,70 +103,72 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
     {
         _dataSets.removeAll()
         
-        yMax = -Double.greatestFiniteMagnitude
-        yMin = Double.greatestFiniteMagnitude
-        xMax = -Double.greatestFiniteMagnitude
-        xMin = Double.greatestFiniteMagnitude
+        _yMax = -Double.greatestFiniteMagnitude
+        _yMin = Double.greatestFiniteMagnitude
+        _xMax = -Double.greatestFiniteMagnitude
+        _xMin = Double.greatestFiniteMagnitude
         
-        leftAxisMax = -Double.greatestFiniteMagnitude
-        leftAxisMin = Double.greatestFiniteMagnitude
-        rightAxisMax = -Double.greatestFiniteMagnitude
-        rightAxisMin = Double.greatestFiniteMagnitude
+        _leftAxisMax = -Double.greatestFiniteMagnitude
+        _leftAxisMin = Double.greatestFiniteMagnitude
+        _rightAxisMax = -Double.greatestFiniteMagnitude
+        _rightAxisMin = Double.greatestFiniteMagnitude
         
+        // TODO: Special for TN
         let allData = self.allData
-        
-        for data in allData
-        {
+        guard let data = (allData.filter { $0 as? BarChartData == nil && $0.dataSets.first?.isVisible ?? false}).first else { return }
+        //for data in allData
+        //{
             data.calcMinMax()
             
-            _dataSets.append(contentsOf: data)
+            let sets = data.dataSets
+            _dataSets.append(contentsOf: sets)
             
-            if data.yMax > yMax
+            if data.yMax > _yMax
             {
-                yMax = data.yMax
+                _yMax = data.yMax
             }
             
-            if data.yMin < yMin
+            if data.yMin < _yMin
             {
-                yMin = data.yMin
+                _yMin = data.yMin
             }
             
-            if data.xMax > xMax
+            if data.xMax > _xMax
             {
-                xMax = data.xMax
+                _xMax = data.xMax
             }
             
-            if data.xMin < xMin
+            if data.xMin < _xMin
             {
-                xMin = data.xMin
+                _xMin = data.xMin
             }
 
-            for set in data
+            for dataset in sets
             {
-                if set.axisDependency == .left
+                if dataset.axisDependency == .left
                 {
-                    if set.yMax > leftAxisMax
+                    if dataset.yMax > _leftAxisMax
                     {
-                        leftAxisMax = set.yMax
+                        _leftAxisMax = dataset.yMax
                     }
-                    if set.yMin < leftAxisMin
+                    if dataset.yMin < _leftAxisMin
                     {
-                        leftAxisMin = set.yMin
+                        _leftAxisMin = dataset.yMin
                     }
                 }
                 else
                 {
-                    if set.yMax > rightAxisMax
+                    if dataset.yMax > _rightAxisMax
                     {
-                        rightAxisMax = set.yMax
+                        _rightAxisMax = dataset.yMax
                     }
-                    if set.yMin < rightAxisMin
+                    if dataset.yMin < _rightAxisMin
                     {
-                        rightAxisMin = set.yMin
+                        _rightAxisMin = dataset.yMin
                     }
                 }
             }
-        }
+       // }
     }
     
     /// All data objects in row: line-bar-scatter-candle-bubble if not null.

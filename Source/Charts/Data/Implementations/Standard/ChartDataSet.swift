@@ -382,6 +382,13 @@ open class ChartDataSet: ChartBaseDataSet
         return true
     }
     
+    public func insert(entries: [ChartDataEntry], at index: Int) {
+        self.entries.insert(contentsOf: entries, at: index)
+        for entry in entries {
+            calcMinMax(entry: entry)
+        }
+    }
+
     /// Adds an Entry to the DataSet dynamically.
     /// Entries are added to their appropriate index respective to it's x-index.
     /// This will also recalculate the current minimum and maximum values of the DataSet and the value-sum.
