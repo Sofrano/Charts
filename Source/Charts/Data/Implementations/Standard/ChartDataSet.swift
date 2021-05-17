@@ -176,6 +176,7 @@ open class ChartDataSet: ChartBaseDataSet
     
     public func insert(entries: [ChartDataEntry], at index: Int) {
         self.entries.insert(contentsOf: entries, at: index)
+        self.entries = self.entries.sorted { $0.x < $1.x }
         for entry in entries {
             calcMinMax(entry: entry)
         }
